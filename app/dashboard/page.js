@@ -138,16 +138,51 @@ export default function Dashboard(){
             <div>Expires</div>
           </div>
           {/* rows */}
-          {rows.map((r, i) => (
-            <div key={i} style={{ display:'grid', gridTemplateColumns:'1.2fr 2fr 1.4fr 2fr 1.8fr 1.8fr', gap:0, borderBottom:'1px solid #2a3356', padding:12 }}>
-              <div>{s(r?.subscriberId)}</div>
-              <div style={{ fontFamily:'ui-monospace,SFMono-Regular,Menlo,Monaco' }}>{getICCID(r)}</div>
-              <div>{formatStatus(r?.status)}</div>
-              <div>{formatPackages(r)}</div>
-              <div>{cleanDate(r?.tsactivationutc || r?.activationDate)}</div>
-              <div>{cleanDate(r?.tsexpirationutc || r?.expiryDate)}</div>
-            </div>
-          ))}
+          {<div style={{
+  display: 'grid',
+  gridTemplateColumns: '1fr 2fr 1.5fr 2fr 1.5fr 1.5fr 1.5fr 1.5fr 1.5fr 1.2fr',
+  gap: '12px',
+  padding: '12px 0',
+  fontWeight: 'bold',
+  color: '#aab4f9',
+  borderBottom: '2px solid #2a3356'
+}}>
+  <div>ID</div>
+  <div>ICCID</div>
+  <div>Status</div>
+  <div>Package</div>
+  <div>Activated</div>
+  <div>Expires</div>
+  <div>Subscr. €</div>
+  <div>Reseller €</div>
+  <div>Profit €</div>
+  <div>Margin</div>
+</div>
+
+{rows.map((r, i) => (
+  <div key={i} style={{
+    display: 'grid',
+    gridTemplateColumns: '1fr 2fr 1.5fr 2fr 1.5fr 1.5fr 1.5fr 1.5fr 1.5fr 1.2fr',
+    gap: '12px',
+    borderBottom: '1px solid #2a3356',
+    padding: '12px 0',
+    fontSize: 14
+  }}>
+    <div>{s(r?.subscriberId)}</div>
+    <div style={{ fontFamily: 'monospace' }}>{getICCID(r)}</div>
+    <div>{formatStatus(r?.status)}</div>
+    <div>{formatPackages(r)}</div>
+    <div>{cleanDate(r?.activationDate || r?.tsactivationutc)}</div>
+    <div>{cleanDate(r?.expiryDate || r?.tsexpirationutc)}</div>
+    <div>{euro(r?.subscriberCost)}</div>
+    <div>{euro(r?.resellerCostWeeklyTotal)}</div>
+    <div>{euro(r?.profit)}</div>
+    <div>{r?.margin?.toFixed(1)}%</div>
+  </div>
+))}
+
+{!loading && !error && rows.length === 0 && <div style={{ padding: 16, opacity: 0.8 }}>No data.</div>}
+{loading && <div style={{ padding: 16 }}>Loading…</div>}}
           {!loading && !error && rows.length===0 && <div style={{ padding:16, opacity:0.8 }}>No data.</div>}
           {loading && <div style={{ padding:16 }}>Loading…</div>}
         </div>
